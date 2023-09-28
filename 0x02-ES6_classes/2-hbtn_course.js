@@ -1,26 +1,43 @@
-export default class Currency {
-  constructor(code, name) {
-    this._code = code;
+export default class HolbertonCourse {
+  constructor(name, length, students) {
+    if (typeof name !== 'string' || typeof length !== 'number' || !Array.isArray(students)) {
+      throw new Error('Invalid input type');
+    }
     this._name = name;
-  }
-
-  set code(code) {
-    this._code = code;
-  }
-
-  get code() {
-    return this._code;
-  }
-
-  set name(name) {
-    this._name = name;
+    this._length = length;
+    this._students = students;
   }
 
   get name() {
     return this._name;
   }
 
-  displayFullCurrency() {
-    return `${this.name} (${this.code})`;
+  set name(value) {
+    if (typeof value !== 'string') {
+      throw new Error('Invalid input type');
+    }
+    this._name = value;
+  }
+
+  get length() {
+    return this._length;
+  }
+
+  set length(value) {
+    if (typeof value !== 'number') {
+      throw new Error('Invalid input type');
+    }
+    this._length = value;
+  }
+
+  get students() {
+    return this._students;
+  }
+
+  set students(value) {
+    if (!Array.isArray(value)) {
+      throw new Error('Invalid input type');
+    }
+    this._students = value;
   }
 }
