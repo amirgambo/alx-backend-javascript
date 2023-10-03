@@ -1,9 +1,9 @@
-export default function updateStudentGradeByCity(arr, city, newGrades) {
-  return arr
+export default function updateStudentGradeByCity(students, city, newGrades) {
+  return students
     .filter(student => student.location === city)
     .map(student => {
-      let gradeObj = newGrades.find(g => g.studentId === student.id);
-      let grade = gradeObj ? gradeObj.grade : 'N/A'; // Set to 'N/A' if no grade found
+      const gradeObj = newGrades.find(grade => grade.studentId === student.id);
+      const grade = gradeObj ? gradeObj.grade : 'N/A';
       return { ...student, grade: grade };
     });
 }
