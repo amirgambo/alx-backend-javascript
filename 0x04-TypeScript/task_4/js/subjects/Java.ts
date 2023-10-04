@@ -1,16 +1,16 @@
-// task_4/js/subjects/Cpp.ts
+// task_4/js/subjects/Java.ts
 namespace Subjects {
   export interface Teacher {
-    experienceTeachingC?: number;
+    experienceTeachingJava?: number;
   }
 
-  export class Cpp extends Subject {
+  export class Java extends Subject {
     getRequirements(): string {
-      return "Here is the list of requirements for Cpp";
+      return "Here is the list of requirements for Java";
     }
 
     getAvailableTeacher(): string {
-      if (this.teacher?.experienceTeachingC !== undefined) {
+      if (this.teacher?.experienceTeachingJava !== undefined) {
         return `Available Teacher: ${this.teacher.firstName}`;
       } else {
         return "No available teacher";
@@ -19,5 +19,5 @@ namespace Subjects {
   }
 }
 
-// Export Cpp class for external use
+// Export Java class for external use
 export { Subjects };

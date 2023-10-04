@@ -1,3 +1,4 @@
+// interface.ts
 export type RowID = number;
 
 export interface RowElement {
