@@ -1,26 +1,30 @@
 const http = require('http');
-const students = require('./3-read_file_async');
-const hostname = '127.0.0.1';
-const port = 1245;
+const { readFile } = require('fs');
 
 const app = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
   if (req.url === '/') {
+    res.writeHead(200, { 'Content-Type': 'text/plain' });
     res.end('Hello Holberton School!');
   } else if (req.url === '/students') {
-    res.write('This is the list of our students\n');
-    students(process.argv[2]).then((data) => {
-      res.write(`Number of students: ${data.students.length}\n`);
-      res.write(`Number of students in CS: ${data.csStudents.length}. List: ${data.csStudents.join(', ')}\n`);
-      res.write(`Number of students in SWE: ${data.sweStudents.length}. List: ${data.sweStudents.join(', ')}`);
-      res.end();
-    }).catch((err) => res.end(err.message));
+    readFile(process.argv[2], 'utf8', (err, data) => {
+      if (err) {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Cannot load the database');
+      } else {
+        const students = data.split('\n')
+          .filter((student) => student)
+          .map((student) => student.split(','))
+          .map((student) => `${student[0]} ${student[1]}`)
+          .join('\n');
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.end(`This is the list of our students\n${students}`);
+      }
+    });
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Invalid request');
   }
 });
-  
-app.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}`);
-});
 
+app.listen(1245);
 module.exports = app;
