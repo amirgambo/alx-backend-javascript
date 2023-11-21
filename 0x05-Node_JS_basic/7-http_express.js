@@ -1,29 +1,26 @@
 const express = require('express');
-const students = require('./3-read_file_async');
+const { readFile } = require('fs');
+
 const app = express();
-const hostname = '127.0.0.1';
-const port = 1245;
 
 app.get('/', (req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
   res.send('Hello Holberton School!');
 });
 
-app.get('/students', async (req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.write('This is the list of our students\n');
-  await students(process.argv[2]).then((data) => {
-    res.write(`Number of students: ${data.students.length}\n`);
-    res.write(`Number of students in CS: ${data.csStudents.length}. List: ${data.csStudents.join(', ')}\n`);
-    res.write(`Number of students in SWE: ${data.sweStudents.length}. List: ${data.sweStudents.join(', ')}`);
-  }).catch((err) => res.write(err.message))
-    .finally(() => {
-      res.end();
-    });
+app.get('/students', (req, res) => {
+  readFile(process.argv[2], 'utf8', (err, data) => {
+    if (err) {
+      res.status(404).send('Cannot load the database');
+    } else {
+      const students = data.split('\n')
+        .filter((student) => student)
+        .map((student) => student.split(','))
+        .map((student) => `${student[0]} ${student[1]}`)
+        .join('\n');
+      res.send(`This is the list of our students\n${students}`);
+    }
+  });
 });
 
-app.listen(port, hostname, () => {
-    console.log(`Server running at http://${hostname}:${port}`);
-});
+app.listen(1245);
+module.exports = app;
